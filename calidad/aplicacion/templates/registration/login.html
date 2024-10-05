@@ -1,0 +1,52 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href={% static "../static/css/register.css" %}>
+    
+</head>
+
+<body>
+    
+    <div class="menu contt">
+        <a href={% url "index" %} class="logo">iCellTechHub</a>
+        <nav class="navbar">
+            <input type="checkbox" id="menu">
+            <label for="menu">
+                <img src={% static "../static/images/menu.png" %}class="menu-icono" alt="menu">
+            </label>
+            <ul>
+                <li><a href={% url "index" %}>Inicio</a></li>
+                {% if user.is_superuser %}
+                <li><a href={% url "dashboard" %}>Admin</a></li>
+                {% endif %}
+                <li><a href={% url "login" %}><img src={% static "../static/images/klipartz.com.png"%} alt=""></a></li>
+            </ul>
+        </nav>
+
+    </div>
+    <div class="formulario">
+        <h1>Inicio de sesion</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{form | crispy}}
+            <input type="submit"value="iniciar">
+            <p class="warnings" id="warnings"></p>
+            <div class="registrarse">
+                Quiero hacer el <a href={% url "usuariosnuevos" %}>registro</a>
+            </div>
+
+        </form>
+        <div id = 'error'></div>
+    </div>
+
+
+</body>
+
+</html>

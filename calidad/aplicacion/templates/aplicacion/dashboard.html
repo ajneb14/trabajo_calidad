@@ -1,0 +1,157 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dashboard</title>
+    <link rel="stylesheet" href="{% static '../static/css/dashboard.css' %}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+</head>
+
+<body>
+    {% if perms.aplicacion.add_producto %}
+    {% if perms.aplicacion.add_persona %}
+    <div class="sidebar">
+        <div class="logo"></div>
+        <ul class="menu">
+
+            <li class="active">
+                <a href="#">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+
+            </li>
+            <li>
+
+                <a href={% url "usuarios" %}>
+                    <i class="fas fa-user"></i>
+                    <span>Usuarios</span>
+                </a>
+
+            </li>
+            <li>
+
+                <a href={% url "nuevosproductos" %}>
+                    <i class="fas fa-star"></i>
+                    <span>Productos</span>
+                </a>
+
+            </li>
+        </li>
+            <li>
+
+                <a href={% url "catalogo" %}>
+                <i class="fas fa-barcode"></i>
+                <span>Catalogo</span>
+            </a>
+        </li>
+            <li class="logout">
+                <a href={% url "index" %}>
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Volver a index</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    
+    <div class="main--content">
+        <div class="header--wrapper">
+            <div class="header--title">
+                <h2> Dashboard</h2>
+            </div>
+            <div class="user--info">
+                <div class="searh--box">
+                    <i class="fa-solid fa-search"></i>
+                    <input type="text" placeholder="Search" />
+                </div>
+            </div>
+        </div>
+        <div class="card--container">
+            <h3 class="main--title">Resumen</h3>
+            <div class="card--wrapper">
+                <div class="payment--card light-red">
+                    <div class="card--header">
+                        <div class="amount">
+                            <span class="title">
+                                Monto total mes </span>
+                            <span class="amount--value">$500.00</span>
+                        </div>
+                        <i class="fas fa-dollar-sign icon"></i>
+                    </div>
+                    <span class="card-detail">**** **** **** 3543</span>
+                </div>
+                <div class="payment--card light-purple">
+                    <div class="card--header">
+                        <div class="amount">
+                            <span class="title">
+                                Monto Diario </span>
+                            <span class="amount--value">$200.00</span>
+                        </div>
+                        <i class="fas fa-list icon dark-purple"></i>
+                    </div>
+                    <span class="card-detail">**** **** **** 5542</span>
+                </div>
+                <div class="payment--card light-blue">
+                    <div class="card--header">
+                        <div class="amount">
+                            <span class="title">
+                                Pagos realizados </span>
+                            <span class="amount--value">$150.00</span>
+                        </div>
+                        <i class="fa-solid fa-check icon dark-blue"></i>
+                    </div>
+                    <span class="card-detail">**** **** **** 7745</span>
+                </div>
+                <div class ="cat">
+                    <img id="cat-image" src="" alt="Gato">
+                </div>
+            </div>
+        </div>
+        <div class="tabular--wrapper">
+            <h3 class="main--title">Compras recientes</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Fecha</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                            <th>Ver detalle</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for compra in compras_recientes %}
+                        <tr>
+                            <td>{{ compra.id }}</td>
+                            <td>{{ compra.fecha }}</td>
+                            <td>{{ compra.total }}</td>
+                            <td>
+                                <form action="{% url 'cambiar_estado_pedido' compra.id %}" method="post">
+                                    {% csrf_token %}
+                                    <select name="estado">
+                                        {% for estado in compra.ESTADOS_PEDIDO %}
+                                        <option value="{{ estado.0 }}" {% if estado.0 == compra.estado %}selected{% endif %}>
+                                            {{ estado.1 }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                    <button type="submit">Actualizar</button>
+                                </form>
+                            </td>
+                            <td><a class="" href="{% url "detalle_pedido" compra.id %}" role="button">Ver detalle</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    <script src={% static "../static/js/api.js"%}></script>
+</body>
+    {% endif %}
+    {% endif %}
+</html>
